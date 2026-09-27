@@ -6,129 +6,249 @@
 <meta name="theme-color" content="#f28c28">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="橘子MP3">
-<link rel="manifest" href="manifest.webmanifest?v=7">
-<link rel="icon" href="icon.svg?v=7" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icon.svg?v=7">
-<title>橘子 MP3 轉檔器</title>
+<link rel="manifest" href="manifest.webmanifest?v=8">
+<link rel="icon" href="icon.svg?v=8" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=8">
+<title>橘子 MP3 批次轉檔器</title>
 <style>
-:root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#767676;--line:#efd4bc}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(#fff8f1,#fffdf9);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;color:var(--txt)}
-main{max-width:720px;margin:auto;padding:22px 16px 42px}.pill{display:inline-block;background:#fff0e3;color:#c36b18;border-radius:999px;padding:7px 12px;font-size:14px}
-h1{font-size:34px;margin:17px 0 7px;line-height:1.15}.sub{color:var(--muted);font-size:18px;margin-bottom:20px}
+:root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#777;--line:#efd4bc;--green:#267a4d}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(#fff8f1,#fffdf9);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;color:var(--txt)}
+main{max-width:720px;margin:auto;padding:22px 16px 46px}
+.pill{display:inline-block;background:#fff0e3;color:#c36b18;border-radius:999px;padding:7px 12px;font-size:14px}
+h1{font-size:34px;line-height:1.12;margin:17px 0 8px}.sub{color:var(--muted);font-size:18px;margin-bottom:20px;line-height:1.5}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 8px 28px rgba(160,103,45,.08)}
-.pick{display:block;border:3px dashed var(--o2);border-radius:22px;padding:28px 14px;text-align:center;background:#fffaf5;cursor:pointer}
-.pick b{display:block;font-size:23px;margin-bottom:9px}.pick span{color:var(--muted);font-size:14px;line-height:1.55}
-input[type=file]{position:absolute;left:-9999px}.row{margin-top:17px}label.txt{display:block;margin-bottom:8px;font-size:17px}
-select,button{width:100%;border-radius:16px;padding:14px 15px;font-size:18px}select{border:1px solid #e6c3a5;background:#fff}
-button{border:0;font-weight:700}.primary{background:linear-gradient(#ffbf8b,#ffa55f);color:#fff;margin-top:14px}.secondary{background:#fff1e4;color:#ad5906;border:1px solid #edc7a5;margin-top:10px}
-button:disabled{opacity:.45}.summary{margin:14px 2px 4px;color:#7a6a5c;font-size:14px}
-.item{border:1px solid #edd8c5;border-radius:16px;padding:12px;margin-top:10px;background:#fffdfa}.name{font-weight:700;word-break:break-all}.meta,.status{font-size:13px;color:#777;margin-top:5px}
-.progress{height:8px;background:#f2e6da;border-radius:99px;overflow:hidden;margin-top:9px}.bar{height:100%;background:var(--o);width:0;transition:width .2s}
-.actions{display:flex;gap:8px;margin-top:9px}.actions button{font-size:14px;padding:9px}.rm{background:#fff2f0;color:#994236;border:1px solid #efcbc5}.folder{margin-top:14px;padding:13px 14px;border-radius:15px;background:#fff8ef;border:1px solid #efd8c1;font-size:14px;line-height:1.65;color:#6e5f51}
-.note{margin-top:16px;font-size:13px;line-height:1.65;color:#76685b}.install{margin-top:18px;padding:15px;border-radius:18px;background:#fff5ea;border:1px solid #efd5bb;line-height:1.6;font-size:14px}.install b{color:#b45d0d}
+.step{font-weight:800;color:#b85e0a;margin:2px 0 10px;font-size:15px}
+.pick{display:block;border:3px dashed var(--o2);border-radius:22px;padding:27px 14px;text-align:center;background:#fffaf5;cursor:pointer}
+.pick b{display:block;font-size:22px;margin-bottom:9px}.pick span{color:var(--muted);font-size:14px;line-height:1.6}
+input[type=file]{position:absolute;left:-9999px}
+.row{margin-top:18px}label.txt{display:block;margin-bottom:8px;font-size:17px}
+select,button{width:100%;border-radius:16px;padding:14px 15px;font-size:18px}
+select{border:1px solid #e6c3a5;background:#fff}
+button{border:0;font-weight:800}
+.primary{background:linear-gradient(#ffbf8b,#ffa55f);color:#fff;margin-top:14px}
+.save{background:linear-gradient(#45a66d,#2e8757);color:#fff;margin-top:12px}
+button:disabled{opacity:.42}
+.summary{margin:14px 2px 4px;color:#76685b;font-size:14px}
+.item{border:1px solid #edd8c5;border-radius:16px;padding:12px 13px;margin-top:10px;background:#fffdfa}
+.name{font-weight:800;word-break:break-all}.meta,.status{font-size:13px;color:#777;margin-top:5px}
+.progress{height:8px;background:#f2e6da;border-radius:99px;overflow:hidden;margin-top:9px}
+.bar{height:100%;background:var(--o);width:0;transition:width .2s}
+.actions{display:flex;gap:8px;margin-top:9px}.actions button{font-size:14px;padding:9px}
+.rm{background:#fff2f0;color:#994236;border:1px solid #efcbc5}
+.notice{margin-top:16px;padding:13px 14px;border-radius:15px;background:#eef8f1;border:1px solid #cde7d6;font-size:14px;line-height:1.65;color:#35664a}
+.note{margin-top:16px;font-size:13px;line-height:1.7;color:#76685b}
+.install{margin-top:18px;padding:15px;border-radius:18px;background:#fff5ea;border:1px solid #efd5bb;line-height:1.65;font-size:14px}
+.install b{color:#b45d0d}
+.hidden{display:none}
 </style>
 </head>
 <body>
 <main>
 <span class="pill">中文介面・免安裝</span>
 <h1>🍊 橘子 MP3 批次轉檔器</h1>
-<div class="sub">把 iPhone 語音備忘錄的 M4A 批次轉成 MP3</div>
+<div class="sub">一次選多個 M4A，全部轉成 MP3，再一次選擇要存到哪個「檔案」資料夾。</div>
 
 <section class="card">
+<div class="step">① 選擇音檔</div>
 <label class="pick" for="files">
   <b>點我選擇 M4A 音檔（可多選）</b>
   <span>可從 iCloud Drive／「檔案」App 一次選多個<br>支援 M4A、AAC、WAV 等常見音訊格式</span>
 </label>
 <input id="files" type="file" accept=".m4a,.aac,.wav,audio/*" multiple>
-
-<div class="row">
-<label class="txt" for="rate">MP3 音質：</label>
-<select id="rate">
-<option value="128">128 kbps（檔案較小）</option>
-<option value="192" selected>192 kbps（推薦：詩班練唱）</option>
-<option value="256">256 kbps（高音質）</option>
-<option value="320">320 kbps（最高常用音質）</option>
-</select>
-</div>
-
-<button id="go" class="primary" disabled>全部轉成 MP3 並自動儲存</button>
 <div id="summary" class="summary">尚未選擇檔案。</div>
-<div class="folder"><b>📁 儲存位置</b><br>iPhone 會依 Safari 的「下載項目」設定，自動存到你指定的資料夾。設定一次後 Safari 會記住：<br><b>設定 → App → Safari → 下載項目 → 其他</b></div>
 <div id="list"></div>
 
-<div class="note">選完檔案後，下方會立即列出所有檔名。按「全部轉成 MP3 並自動儲存」後，每個檔案完成時會自動送到 Safari 設定的下載資料夾，不需要再按下載鍵。音檔只在你的瀏覽器內處理，不會由本頁主動上傳。iPhone 若一次轉很多長音檔，建議分成每批 5～10 個，較穩定。</div>
+<div class="row">
+  <div class="step">② 設定音質並轉檔</div>
+  <label class="txt" for="rate">MP3 音質：</label>
+  <select id="rate">
+    <option value="128">128 kbps（檔案較小）</option>
+    <option value="192" selected>192 kbps（推薦：詩班練唱）</option>
+    <option value="256">256 kbps（高音質）</option>
+    <option value="320">320 kbps（最高常用音質）</option>
+  </select>
+</div>
+<button id="go" class="primary" disabled>全部轉成 MP3</button>
+
+<div id="saveArea" class="hidden">
+  <div class="step" style="margin-top:18px">③ 選擇儲存位置</div>
+  <button id="saveAll" class="save">儲存全部 MP3 到「檔案」…</button>
+  <div class="notice">點上面的按鈕後，iPhone 會開啟系統分享畫面。請選「儲存到檔案」，就能選擇 iCloud Drive 或「我的 iPhone」裡的資料夾，並一次儲存這批 MP3。</div>
+</div>
+
+<div class="note">音檔只在你的瀏覽器內處理，不會由本頁主動上傳。iPhone 若一次轉很多長音檔，建議每批 5～10 個較穩定。因 iPhone 的安全限制，網站不能在轉檔途中自動取得任意資料夾權限，所以「選擇資料夾」必須由你最後按一次「儲存全部 MP3」來開啟系統畫面。</div>
 </section>
 
-<div class="install"><b>📱 放到 iPhone 主畫面</b><br>請用 Safari 開啟本頁 →「分享」→「加入主畫面」。之後桌面會出現「橘子MP3」，直接點開即可。</div>
+<div class="install"><b>📱 主畫面圖示</b><br>新版使用你確認的「橘子＋MP3＋轉檔箭頭」平面圖示。若桌面仍是舊圖示，請刪除舊捷徑，再用 Safari 開本站 → 分享 → 加入主畫面。</div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});
-const f=document.getElementById('files'),go=document.getElementById('go'),list=document.getElementById('list'),summary=document.getElementById('summary'),rate=document.getElementById('rate');
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});
+
+const f=document.getElementById('files');
+const go=document.getElementById('go');
+const list=document.getElementById('list');
+const summary=document.getElementById('summary');
+const rate=document.getElementById('rate');
+const saveArea=document.getElementById('saveArea');
+const saveAll=document.getElementById('saveAll');
+
 let entries=[];
+let busy=false;
+
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const base=n=>n.replace(/\.[^.]+$/,'');
 const sz=n=>n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';
+
 function render(){
- list.innerHTML='';
- entries.forEach((e,i)=>{
-  const d=document.createElement('div');d.className='item';
-  d.innerHTML='<div class="name">'+(i+1)+'. '+esc(e.file.name)+'</div><div class="meta">'+sz(e.file.size)+'</div><div class="progress"><div class="bar" id="b'+i+'" style="width:'+(e.p||0)+'%"></div></div><div class="status" id="s'+i+'">'+esc(e.status||'等待轉檔')+'</div><div class="actions"><button class="rm" id="r'+i+'">移除</button></div>';
-  list.appendChild(d);
-  d.querySelector('#r'+i).onclick=()=>{if(e.url)URL.revokeObjectURL(e.url);entries.splice(i,1);render()};
- });
- go.disabled=!entries.length;
- summary.textContent=entries.length?'已選擇 '+entries.length+' 個檔案，檔名如下。':'尚未選擇檔案。';
+  list.innerHTML='';
+  entries.forEach((e,i)=>{
+    const d=document.createElement('div');
+    d.className='item';
+    d.innerHTML=
+      '<div class="name">'+(i+1)+'. '+esc(e.file.name)+'</div>'+
+      '<div class="meta">'+sz(e.file.size)+'</div>'+
+      '<div class="progress"><div class="bar" id="b'+i+'" style="width:'+(e.p||0)+'%"></div></div>'+
+      '<div class="status" id="s'+i+'">'+esc(e.status||'等待轉檔')+'</div>'+
+      '<div class="actions"><button class="rm" id="r'+i+'" '+(busy?'disabled':'')+'>移除</button></div>';
+    list.appendChild(d);
+    d.querySelector('#r'+i).onclick=()=>{
+      if(e.url)URL.revokeObjectURL(e.url);
+      entries.splice(i,1);
+      saveArea.classList.add('hidden');
+      render();
+    };
+  });
+  go.disabled=busy||!entries.length;
+  summary.textContent=entries.length
+    ? '已選擇 '+entries.length+' 個檔案：下面會全部轉成 MP3。'
+    : '尚未選擇檔案。';
 }
+
 f.addEventListener('change',()=>{
- for(const file of f.files){if(!entries.some(e=>e.file.name===file.name&&e.file.size===file.size))entries.push({file,status:'等待轉檔',p:0})}
- f.value='';render();
-});
-function prog(i,p,msg){entries[i].p=p;entries[i].status=msg;const b=document.getElementById('b'+i),s=document.getElementById('s'+i);if(b)b.style.width=p+'%';if(s)s.textContent=msg}
-async function decode(file){
- const ab=await file.arrayBuffer();const C=window.AudioContext||window.webkitAudioContext;const c=new C();
- try{const a=await c.decodeAudioData(ab.slice(0));const ch=[];for(let i=0;i<a.numberOfChannels;i++)ch.push(a.getChannelData(i));return{ch,sr:a.sampleRate}}finally{try{await c.close()}catch(e){}}
-}
-function pcm16(x){const o=new Int16Array(x.length);for(let i=0;i<x.length;i++){const s=Math.max(-1,Math.min(1,x[i]));o[i]=s<0?s*32768:s*32767}return o}
-async function encode(p,br,cb){
- if(typeof lamejs==='undefined')throw new Error('轉檔元件未載入，請確認網路後重新整理。');
- const n=Math.min(2,p.ch.length),L=pcm16(p.ch[0]),R=n===2?pcm16(p.ch[1]):null,enc=new lamejs.Mp3Encoder(n,p.sr,br),out=[],step=1152;
- for(let i=0;i<L.length;i+=step){const l=L.subarray(i,i+step),r=R&&R.subarray(i,i+step),buf=n===2?enc.encodeBuffer(l,r):enc.encodeBuffer(l);if(buf.length)out.push(new Int8Array(buf));if(i%(step*80)===0){cb(Math.round(i/L.length*95));await new Promise(r=>setTimeout(r,0))}}
- const end=enc.flush();if(end.length)out.push(new Int8Array(end));cb(100);return new Blob(out,{type:'audio/mpeg'})
-}
-function autoSave(i){
- const e=entries[i]; if(!e.blob)return;
- const a=document.createElement('a');
- a.href=e.url;
- a.download=base(e.file.name)+'.mp3';
- a.style.display='none';
- document.body.appendChild(a);
- a.click();
- a.remove();
-}
-go.onclick=async()=>{
- go.disabled=true;const br=+rate.value;
- for(let i=0;i<entries.length;i++){
-  try{
-   prog(i,3,'讀取與解碼中…');
-   const p=await decode(entries[i].file);
-   prog(i,8,'開始轉檔…');
-   const blob=await encode(p,br,x=>prog(i,8+Math.round(x*.9),'轉檔中…'));
-   if(entries[i].url)URL.revokeObjectURL(entries[i].url);
-   entries[i].blob=blob;
-   entries[i].url=URL.createObjectURL(blob);
-   prog(i,100,'轉檔完成，正在自動儲存…');
-   autoSave(i);
-   entries[i].status='已完成並送出儲存';
-   render();
-   await new Promise(r=>setTimeout(r,350));
-  }catch(err){
-   prog(i,0,'失敗：'+(err.message||err));
+  for(const file of f.files){
+    if(!entries.some(e=>e.file.name===file.name&&e.file.size===file.size)){
+      entries.push({file,status:'等待轉檔',p:0,blob:null,url:null});
+    }
   }
- }
- go.disabled=false;
- summary.textContent='處理完成：'+entries.filter(e=>e.blob).length+' / '+entries.length+' 個成功，已自動送到 Safari 下載資料夾。'
+  f.value='';
+  saveArea.classList.add('hidden');
+  render();
+});
+
+function prog(i,p,msg){
+  entries[i].p=p;
+  entries[i].status=msg;
+  const b=document.getElementById('b'+i),s=document.getElementById('s'+i);
+  if(b)b.style.width=p+'%';
+  if(s)s.textContent=msg;
 }
+
+async function decode(file){
+  const ab=await file.arrayBuffer();
+  const C=window.AudioContext||window.webkitAudioContext;
+  const c=new C();
+  try{
+    const a=await c.decodeAudioData(ab.slice(0));
+    const ch=[];
+    for(let i=0;i<a.numberOfChannels;i++)ch.push(a.getChannelData(i));
+    return {ch,sr:a.sampleRate};
+  }finally{
+    try{await c.close()}catch(e){}
+  }
+}
+
+function pcm16(x){
+  const o=new Int16Array(x.length);
+  for(let i=0;i<x.length;i++){
+    const s=Math.max(-1,Math.min(1,x[i]));
+    o[i]=s<0?s*32768:s*32767;
+  }
+  return o;
+}
+
+async function encode(p,br,cb){
+  if(typeof lamejs==='undefined')throw new Error('轉檔元件未載入，請確認網路後重新整理。');
+  const n=Math.min(2,p.ch.length);
+  const L=pcm16(p.ch[0]);
+  const R=n===2?pcm16(p.ch[1]):null;
+  const enc=new lamejs.Mp3Encoder(n,p.sr,br);
+  const out=[],step=1152;
+  for(let i=0;i<L.length;i+=step){
+    const l=L.subarray(i,i+step),r=R&&R.subarray(i,i+step);
+    const buf=n===2?enc.encodeBuffer(l,r):enc.encodeBuffer(l);
+    if(buf.length)out.push(new Int8Array(buf));
+    if(i%(step*80)===0){
+      cb(Math.round(i/L.length*95));
+      await new Promise(r=>setTimeout(r,0));
+    }
+  }
+  const end=enc.flush();
+  if(end.length)out.push(new Int8Array(end));
+  cb(100);
+  return new Blob(out,{type:'audio/mpeg'});
+}
+
+go.onclick=async()=>{
+  busy=true;
+  saveArea.classList.add('hidden');
+  render();
+  const br=+rate.value;
+  let ok=0;
+
+  for(let i=0;i<entries.length;i++){
+    try{
+      prog(i,3,'讀取與解碼中…');
+      const p=await decode(entries[i].file);
+      prog(i,8,'轉檔中…');
+      const blob=await encode(p,br,x=>prog(i,8+Math.round(x*.9),'轉檔中…'));
+      if(entries[i].url)URL.revokeObjectURL(entries[i].url);
+      entries[i].blob=blob;
+      entries[i].url=URL.createObjectURL(blob);
+      entries[i].status='完成，等待一起儲存';
+      entries[i].p=100;
+      ok++;
+      render();
+    }catch(err){
+      entries[i].blob=null;
+      prog(i,0,'失敗：'+(err.message||err));
+    }
+  }
+
+  busy=false;
+  render();
+  summary.textContent='轉檔完成：'+ok+' / '+entries.length+' 個成功。';
+  if(ok>0){
+    saveArea.classList.remove('hidden');
+    setTimeout(()=>saveArea.scrollIntoView({behavior:'smooth',block:'center'}),100);
+  }
+};
+
+saveAll.onclick=async()=>{
+  const done=entries.filter(e=>e.blob);
+  if(!done.length)return;
+
+  const files=done.map(e=>new File([e.blob],base(e.file.name)+'.mp3',{type:'audio/mpeg'}));
+  const data={files};
+
+  try{
+    if(navigator.share && (!navigator.canShare || navigator.canShare(data))){
+      await navigator.share(data);
+      summary.textContent='已叫出 iPhone 儲存／分享畫面。若你選了「儲存到檔案」，這批 MP3 會一起存到你指定的資料夾。';
+    }else{
+      throw new Error('這個瀏覽器不支援一次儲存多個檔案。');
+    }
+  }catch(err){
+    if(err && err.name==='AbortError'){
+      summary.textContent='已取消儲存。MP3 還在這個頁面中，可以再按一次「儲存全部 MP3」。';
+      return;
+    }
+    summary.textContent='無法開啟批次儲存：'+(err.message||err)+'。';
+  }
+};
+
 render();
 </script>
 </body>
