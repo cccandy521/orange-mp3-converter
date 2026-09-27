@@ -1,7 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="112" fill="#fff3e8"/>
-<circle cx="256" cy="292" r="150" fill="#f28c28"/>
-<ellipse cx="197" cy="235" rx="24" ry="35" fill="#ffd5ae" opacity=".75"/>
-<path d="M278 152c39-67 104-75 135-54-15 54-69 92-135 54Z" fill="#57a66a"/>
-<path d="M265 169c10-36 25-62 48-83" stroke="#6c4a2c" stroke-width="18" stroke-linecap="round"/>
+<rect width="512" height="512" rx="108" fill="#FFF9F0"/>
+<circle cx="220" cy="278" r="150" fill="#FF8A12"/>
+<path d="M101 329c18 61 74 103 139 103 74 0 135-54 147-125-27 43-76 70-132 70-65 0-122-39-154-98z" fill="#FF7610" opacity=".45"/>
+<ellipse cx="170" cy="222" rx="22" ry="46" transform="rotate(43 170 222)" fill="#FFD18E"/>
+<path d="M209 120c-50-64-106-55-137-30 22 55 79 82 137 30z" fill="#2EA44F"/>
+<path d="M209 120c-31-16-61-27-93-31 31 16 59 30 82 45z" fill="#16753A"/>
+<path d="M223 133c7-31 19-56 38-77" stroke="#2B6E31" stroke-width="15" stroke-linecap="round"/>
+<path d="M150 274c0-19 12-34 28-34s28 15 28 34" fill="none" stroke="#4B250D" stroke-width="14" stroke-linecap="round"/>
+<path d="M249 274c0-19 12-34 28-34s28 15 28 34" fill="none" stroke="#4B250D" stroke-width="14" stroke-linecap="round"/>
+<path d="M207 303c20 0 43-2 65-8-1 39-20 60-44 60-27 0-43-20-45-47 8-2 16-4 24-5z" fill="#4B250D"/>
+<path d="M195 340c17 17 48 18 64 1-11-17-22-24-34-24-12 0-21 6-30 23z" fill="#FF6F61"/>
+<ellipse cx="142" cy="314" rx="25" ry="15" fill="#FFB07B" opacity=".8"/>
+<ellipse cx="294" cy="314" rx="25" ry="15" fill="#FFB07B" opacity=".8"/>
+
+<path d="M331 260h89l52 52v125c0 17-14 31-31 31H331c-17 0-31-14-31-31V291c0-17 14-31 31-31z" fill="#FFFFFF" stroke="#1F7D3B" stroke-width="16" stroke-linejoin="round"/>
+<path d="M420 260v49c0 12 10 22 22 22h30" fill="#D8F1DB"/>
+<path d="M420 260v49c0 12 10 22 22 22h30" fill="none" stroke="#1F7D3B" stroke-width="12" stroke-linejoin="round"/>
+<path d="M352 332v53" stroke="#1F7D3B" stroke-width="13" stroke-linecap="round"/>
+<path d="M352 335l35-10v41" fill="none" stroke="#1F7D3B" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="339" cy="389" r="15" fill="#1F7D3B"/>
+<circle cx="387" cy="371" r="15" fill="#1F7D3B"/>
+<text x="386" y="438" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="800" fill="#1F7D3B">MP3</text>
+
+<path d="M225 348c19 58 54 84 108 83" fill="none" stroke="#FFFFFF" stroke-width="35" stroke-linecap="round"/>
+<path d="M225 348c19 58 54 84 108 83" fill="none" stroke="#2FA14B" stroke-width="23" stroke-linecap="round"/>
+<path d="M311 401l41 30-39 34" fill="#2FA14B" stroke="#FFFFFF" stroke-width="17" stroke-linejoin="round"/>
+<path d="M311 401l41 30-39 34" fill="#2FA14B" stroke="#2FA14B" stroke-width="7" stroke-linejoin="round"/>
 </svg>
