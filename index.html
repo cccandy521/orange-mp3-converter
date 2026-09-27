@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#f28c28">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="橘子MP3">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icon.svg">
+<link rel="manifest" href="manifest.webmanifest?v=7">
+<link rel="icon" href="icon.svg?v=7" type="image/svg+xml">\n<link rel="apple-touch-icon" href="icon.svg?v=7">
 <title>橘子 MP3 轉檔器</title>
 <style>
 :root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#767676;--line:#efd4bc}
@@ -63,7 +63,7 @@ button:disabled{opacity:.45}.summary{margin:14px 2px 4px;color:#7a6a5c;font-size
 
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{});
 const f=document.getElementById('files'),go=document.getElementById('go'),list=document.getElementById('list'),summary=document.getElementById('summary'),rate=document.getElementById('rate');
 let entries=[];
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
