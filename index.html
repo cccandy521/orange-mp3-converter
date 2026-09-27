@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#f28c28">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="橘子MP3">
-<link rel="manifest" href="manifest.webmanifest?v=8">
-<link rel="icon" href="icon.svg?v=8" type="image/svg+xml">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=8">
+<link rel="manifest" href="manifest.webmanifest?v=12">
+<link rel="icon" href="icon.svg?v=12" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=12">
 <title>橘子 MP3 批次轉檔器</title>
 <style>
 :root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#777;--line:#efd4bc;--green:#267a4d}
@@ -45,7 +45,7 @@ button:disabled{opacity:.42}
 </head>
 <body>
 <main>
-<span class="pill">中文介面・免安裝</span>
+<span class="pill">中文介面・免安裝・v1.2</span>
 <h1>🍊 橘子 MP3 批次轉檔器</h1>
 <div class="sub">一次選多個 M4A，全部轉成 MP3，再一次選擇要存到哪個「檔案」資料夾。</div>
 
@@ -73,8 +73,9 @@ button:disabled{opacity:.42}
 
 <div id="saveArea" class="hidden">
   <div class="step" style="margin-top:18px">③ 選擇儲存位置</div>
-  <button id="saveAll" class="save">儲存全部 MP3 到「檔案」…</button>
-  <div class="notice">點上面的按鈕後，iPhone 會開啟系統分享畫面。請選「儲存到檔案」，就能選擇 iCloud Drive 或「我的 iPhone」裡的資料夾，並一次儲存這批 MP3。</div>
+  <button id="saveAll" class="save">選擇資料夾並儲存全部 MP3</button>
+  <button id="downloadAll" class="primary" style="margin-top:10px">直接下載全部 MP3（備用）</button>
+  <div id="saveStatus" class="notice">建議先按「選擇資料夾並儲存全部 MP3」。若 iPhone 沒有叫出分享畫面，可改按「直接下載全部 MP3（備用）」；備用模式會存到 Safari 設定的下載資料夾。</div>
 </div>
 
 <div class="note">音檔只在你的瀏覽器內處理，不會由本頁主動上傳。iPhone 若一次轉很多長音檔，建議每批 5～10 個較穩定。因 iPhone 的安全限制，網站不能在轉檔途中自動取得任意資料夾權限，所以「選擇資料夾」必須由你最後按一次「儲存全部 MP3」來開啟系統畫面。</div>
@@ -84,8 +85,9 @@ button:disabled{opacity:.42}
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=8').catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=12').catch(()=>{});
 
 const f=document.getElementById('files');
 const go=document.getElementById('go');
@@ -94,6 +96,8 @@ const summary=document.getElementById('summary');
 const rate=document.getElementById('rate');
 const saveArea=document.getElementById('saveArea');
 const saveAll=document.getElementById('saveAll');
+const downloadAll=document.getElementById('downloadAll');
+const saveStatus=document.getElementById('saveStatus');
 
 let entries=[];
 let busy=false;
@@ -192,6 +196,7 @@ async function encode(p,br,cb){
 }
 
 go.onclick=async()=>{
+  summary.textContent='開始轉檔，請稍候…';
   busy=true;
   saveArea.classList.add('hidden');
   render();
@@ -228,27 +233,85 @@ go.onclick=async()=>{
 
 saveAll.onclick=async()=>{
   const done=entries.filter(e=>e.blob);
-  if(!done.length)return;
+  if(!done.length){
+    saveStatus.textContent='目前沒有可儲存的 MP3，請先完成轉檔。';
+    return;
+  }
+
+  saveStatus.textContent='正在準備 iPhone 儲存畫面…';
 
   const files=done.map(e=>new File([e.blob],base(e.file.name)+'.mp3',{type:'audio/mpeg'}));
   const data={files};
 
-  try{
-    if(navigator.share && (!navigator.canShare || navigator.canShare(data))){
-      await navigator.share(data);
-      summary.textContent='已叫出 iPhone 儲存／分享畫面。若你選了「儲存到檔案」，這批 MP3 會一起存到你指定的資料夾。';
-    }else{
-      throw new Error('這個瀏覽器不支援一次儲存多個檔案。');
-    }
-  }catch(err){
-    if(err && err.name==='AbortError'){
-      summary.textContent='已取消儲存。MP3 還在這個頁面中，可以再按一次「儲存全部 MP3」。';
+  // iPhone Safari/WebKit sometimes reports canShare inconsistently.
+  // Try native multi-file share first, directly from this user click.
+  if(navigator.share){
+    try{
+      const r=navigator.share(data);
+      if(r && typeof r.then==='function') await r;
+      saveStatus.textContent='已開啟 iPhone 分享畫面。請選「儲存到檔案」，再選你要的資料夾。';
       return;
+    }catch(err){
+      if(err && err.name==='AbortError'){
+        saveStatus.textContent='你已取消。MP3 還在頁面裡，可再按一次儲存。';
+        return;
+      }
+      saveStatus.textContent='iPhone 無法一次分享多個 MP3，正在改用相容模式…';
     }
-    summary.textContent='無法開啟批次儲存：'+(err.message||err)+'。';
+  }
+
+  // Reliable fallback: one ZIP, then Save to Files. User can tap once in Files to unzip.
+  try{
+    if(typeof JSZip==='undefined') throw new Error('備用元件尚未載入');
+    const zip=new JSZip();
+    done.forEach(e=>zip.file(base(e.file.name)+'.mp3',e.blob));
+    const blob=await zip.generateAsync({type:'blob'});
+    const file=new File([blob],'橘子MP3_批次轉檔.zip',{type:'application/zip'});
+    if(navigator.share){
+      try{
+        const r=navigator.share({files:[file]});
+        if(r && typeof r.then==='function') await r;
+        saveStatus.textContent='已改用相容模式。請選「儲存到檔案」；存好後在「檔案」App 點 ZIP 一下即可解壓成全部 MP3。';
+        return;
+      }catch(err){
+        if(err && err.name==='AbortError'){
+          saveStatus.textContent='你已取消儲存。';
+          return;
+        }
+      }
+    }
+    const u=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=u; a.download='橘子MP3_批次轉檔.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(u),30000);
+    saveStatus.textContent='已下載備用 ZIP 到 Safari 下載資料夾。';
+  }catch(err){
+    saveStatus.textContent='儲存失敗：'+(err.message||err);
+    alert('儲存失敗：'+(err.message||err));
   }
 };
 
+downloadAll.onclick=async()=>{
+  const done=entries.filter(e=>e.blob);
+  if(!done.length){
+    saveStatus.textContent='目前沒有可下載的 MP3。';
+    return;
+  }
+  saveStatus.textContent='正在逐一送出 '+done.length+' 個 MP3 到 Safari 下載資料夾…';
+  for(let i=0;i<done.length;i++){
+    const e=done[i];
+    const a=document.createElement('a');
+    a.href=e.url;
+    a.download=base(e.file.name)+'.mp3';
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    await new Promise(r=>setTimeout(r,500));
+  }
+  saveStatus.textContent='已送出全部 MP3。若 Safari 詢問是否允許多個下載，請選「允許」。';
+};
 render();
 </script>
 </body>
