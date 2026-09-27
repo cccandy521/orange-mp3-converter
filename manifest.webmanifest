@@ -1,0 +1,11 @@
+{
+  "name":"橘子 MP3 批次轉檔器",
+  "short_name":"橘子MP3",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#fff8f1",
+  "theme_color":"#f28c28",
+  "description":"把 iPhone 的 M4A、AAC、WAV 批次轉成 MP3",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
