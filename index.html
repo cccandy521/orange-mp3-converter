@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f28c28">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="橘子MP3">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>🍊 橘子 MP3 批次轉檔器</title>
+<style>
+:root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#767676;--line:#efd4bc}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(#fff8f1,#fffdf9);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;color:var(--txt)}
+main{max-width:720px;margin:auto;padding:22px 16px 42px}.pill{display:inline-block;background:#fff0e3;color:#c36b18;border-radius:999px;padding:7px 12px;font-size:14px}
+h1{font-size:34px;margin:17px 0 7px;line-height:1.15}.sub{color:var(--muted);font-size:18px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 8px 28px rgba(160,103,45,.08)}
+.pick{display:block;border:3px dashed var(--o2);border-radius:22px;padding:28px 14px;text-align:center;background:#fffaf5;cursor:pointer}
+.pick b{display:block;font-size:23px;margin-bottom:9px}.pick span{color:var(--muted);font-size:14px;line-height:1.55}
+input[type=file]{position:absolute;left:-9999px}.row{margin-top:17px}label.txt{display:block;margin-bottom:8px;font-size:17px}
+select,button{width:100%;border-radius:16px;padding:14px 15px;font-size:18px}select{border:1px solid #e6c3a5;background:#fff}
+button{border:0;font-weight:700}.primary{background:linear-gradient(#ffbf8b,#ffa55f);color:#fff;margin-top:14px}.secondary{background:#fff1e4;color:#ad5906;border:1px solid #edc7a5;margin-top:10px}
+button:disabled{opacity:.45}.summary{margin:14px 2px 4px;color:#7a6a5c;font-size:14px}
+.item{border:1px solid #edd8c5;border-radius:16px;padding:12px;margin-top:10px;background:#fffdfa}.name{font-weight:700;word-break:break-all}.meta,.status{font-size:13px;color:#777;margin-top:5px}
+.progress{height:8px;background:#f2e6da;border-radius:99px;overflow:hidden;margin-top:9px}.bar{height:100%;background:var(--o);width:0;transition:width .2s}
+.actions{display:flex;gap:8px;margin-top:9px}.actions button{font-size:14px;padding:9px}.dl{background:#edf8f1;color:#28764c;border:1px solid #cce6d5}.rm{background:#fff2f0;color:#994236;border:1px solid #efcbc5}
+.note{margin-top:16px;font-size:13px;line-height:1.65;color:#76685b}.install{margin-top:18px;padding:15px;border-radius:18px;background:#fff5ea;border:1px solid #efd5bb;line-height:1.6;font-size:14px}.install b{color:#b45d0d}
+</style>
+</head>
+<body>
+<main>
+<span class="pill">中文介面・免安裝</span>
+<h1>🍊 橘子 MP3 批次轉檔器</h1>
+<div class="sub">把 iPhone 語音備忘錄的 M4A 批次轉成 MP3</div>
+
+<section class="card">
+<label class="pick" for="files">
+  <b>點我選擇 M4A 音檔（可多選）</b>
+  <span>可從 iCloud Drive／「檔案」App 一次選多個<br>支援 M4A、AAC、WAV 等常見音訊格式</span>
+</label>
+<input id="files" type="file" accept=".m4a,.aac,.wav,audio/*" multiple>
+
+<div class="row">
+<label class="txt" for="rate">MP3 音質：</label>
+<select id="rate">
+<option value="128">128 kbps（檔案較小）</option>
+<option value="192" selected>192 kbps（推薦：詩班練唱）</option>
+<option value="256">256 kbps（高音質）</option>
+<option value="320">320 kbps（最高常用音質）</option>
+</select>
+</div>
+
+<button id="go" class="primary" disabled>全部轉成 MP3</button>
+<button id="zip" class="secondary" disabled>全部打包 ZIP</button>
+<div id="summary" class="summary">尚未選擇檔案。</div>
+<div id="list"></div>
+
+<div class="note">第一次使用會從網路載入轉檔元件。音檔只在你的瀏覽器內處理，不會由本頁主動上傳。iPhone 若一次轉很多長音檔，建議分成每批 5～10 個，較穩定。</div>
+</section>
+
+<div class="install"><b>📱 放到 iPhone 主畫面</b><br>請用 Safari 開啟本頁 →「分享」→「加入主畫面」。之後桌面會出現「橘子MP3」，直接點開即可。</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+const f=document.getElementById('files'),go=document.getElementById('go'),zipBtn=document.getElementById('zip'),list=document.getElementById('list'),summary=document.getElementById('summary'),rate=document.getElementById('rate');
+let entries=[];
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const base=n=>n.replace(/\.[^.]+$/,'');
+const sz=n=>n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';
+function render(){
+ list.innerHTML='';
+ entries.forEach((e,i)=>{
+  const d=document.createElement('div');d.className='item';
+  d.innerHTML='<div class="name">'+esc(e.file.name)+'</div><div class="meta">'+sz(e.file.size)+'</div><div class="progress"><div class="bar" id="b'+i+'" style="width:'+(e.p||0)+'%"></div></div><div class="status" id="s'+i+'">'+esc(e.status||'等待轉檔')+'</div><div class="actions"><button class="dl" id="d'+i+'" '+(e.blob?'':'disabled')+'>下載 MP3</button><button class="rm" id="r'+i+'">移除</button></div>';
+  list.appendChild(d);
+  d.querySelector('#r'+i).onclick=()=>{if(e.url)URL.revokeObjectURL(e.url);entries.splice(i,1);render()};
+  d.querySelector('#d'+i).onclick=()=>download(i);
+ });
+ go.disabled=!entries.length;zipBtn.disabled=!entries.some(e=>e.blob);
+ summary.textContent=entries.length?'已選擇 '+entries.length+' 個檔案。':'尚未選擇檔案。';
+}
+f.addEventListener('change',()=>{
+ for(const file of f.files){if(!entries.some(e=>e.file.name===file.name&&e.file.size===file.size))entries.push({file,status:'等待轉檔',p:0})}
+ f.value='';render();
+});
+function prog(i,p,msg){entries[i].p=p;entries[i].status=msg;const b=document.getElementById('b'+i),s=document.getElementById('s'+i);if(b)b.style.width=p+'%';if(s)s.textContent=msg}
+async function decode(file){
+ const ab=await file.arrayBuffer();const C=window.AudioContext||window.webkitAudioContext;const c=new C();
+ try{const a=await c.decodeAudioData(ab.slice(0));const ch=[];for(let i=0;i<a.numberOfChannels;i++)ch.push(a.getChannelData(i));return{ch,sr:a.sampleRate}}finally{try{await c.close()}catch(e){}}
+}
+function pcm16(x){const o=new Int16Array(x.length);for(let i=0;i<x.length;i++){const s=Math.max(-1,Math.min(1,x[i]));o[i]=s<0?s*32768:s*32767}return o}
+async function encode(p,br,cb){
+ if(typeof lamejs==='undefined')throw new Error('轉檔元件未載入，請確認網路後重新整理。');
+ const n=Math.min(2,p.ch.length),L=pcm16(p.ch[0]),R=n===2?pcm16(p.ch[1]):null,enc=new lamejs.Mp3Encoder(n,p.sr,br),out=[],step=1152;
+ for(let i=0;i<L.length;i+=step){const l=L.subarray(i,i+step),r=R&&R.subarray(i,i+step),buf=n===2?enc.encodeBuffer(l,r):enc.encodeBuffer(l);if(buf.length)out.push(new Int8Array(buf));if(i%(step*80)===0){cb(Math.round(i/L.length*95));await new Promise(r=>setTimeout(r,0))}}
+ const end=enc.flush();if(end.length)out.push(new Int8Array(end));cb(100);return new Blob(out,{type:'audio/mpeg'})
+}
+go.onclick=async()=>{
+ go.disabled=true;zipBtn.disabled=true;const br=+rate.value;
+ for(let i=0;i<entries.length;i++){
+  try{prog(i,3,'讀取與解碼中…');const p=await decode(entries[i].file);prog(i,8,'開始轉檔…');const blob=await encode(p,br,x=>prog(i,8+Math.round(x*.9),'轉檔中…'));if(entries[i].url)URL.revokeObjectURL(entries[i].url);entries[i].blob=blob;entries[i].url=URL.createObjectURL(blob);prog(i,100,'完成');render()}
+  catch(err){prog(i,0,'失敗：'+(err.message||err))}
+ }
+ go.disabled=false;zipBtn.disabled=!entries.some(e=>e.blob);summary.textContent='處理完成：'+entries.filter(e=>e.blob).length+' / '+entries.length+' 個成功。'
+}
+function download(i){const e=entries[i];if(!e.blob)return;const a=document.createElement('a');a.href=e.url;a.download=base(e.file.name)+'.mp3';document.body.appendChild(a);a.click();a.remove()}
+zipBtn.onclick=async()=>{const done=entries.filter(e=>e.blob);if(!done.length)return;if(typeof JSZip==='undefined'){alert('ZIP 元件未載入，請重新整理。');return}zipBtn.disabled=true;zipBtn.textContent='正在打包 ZIP…';const z=new JSZip();done.forEach(e=>z.file(base(e.file.name)+'.mp3',e.blob));const b=await z.generateAsync({type:'blob'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='橘子MP3_批次轉檔.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);zipBtn.textContent='全部打包 ZIP';zipBtn.disabled=false}
+render();
+</script>
+</body>
+</html>
