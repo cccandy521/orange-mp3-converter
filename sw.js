@@ -1,5 +1,5 @@
-const CACHE='orange-mp3-v15';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./orange-mp3-icon.png'];
+const CACHE='orange-mp3-v16';
+const ASSETS=['./icon.svg','./','./index.html','./manifest.webmanifest','./orange-mp3-icon.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
   self.skipWaiting();
