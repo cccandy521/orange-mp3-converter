@@ -7,7 +7,5 @@
   "background_color":"#fff8f1",
   "theme_color":"#f28c28",
   "description":"把 M4A、AAC、WAV 批次轉成 MP3",
-  "icons":[
-    {"src":"orange-mp3-icon.png?v=15","sizes":"180x180","type":"image/png","purpose":"any"}
-  ]
+  "icons":[{"src":"icon.svg?v=16","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
