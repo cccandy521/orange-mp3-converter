@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#f28c28">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="橘子MP3">
-<link rel="manifest" href="manifest.webmanifest?v=12">
-<link rel="icon" href="icon.svg?v=12" type="image/svg+xml">
-<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=12">
+<link rel="manifest" href="manifest.webmanifest?v=13">
+<link rel="icon" href="icon.svg?v=13" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=13">
 <title>橘子 MP3 批次轉檔器</title>
 <style>
 :root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#777;--line:#efd4bc;--green:#267a4d}
@@ -16,11 +16,11 @@
 body{margin:0;background:linear-gradient(#fff8f1,#fffdf9);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;color:var(--txt)}
 main{max-width:720px;margin:auto;padding:22px 16px 46px}
 .pill{display:inline-block;background:#fff0e3;color:#c36b18;border-radius:999px;padding:7px 12px;font-size:14px}
-h1{font-size:34px;line-height:1.12;margin:17px 0 8px}.sub{color:var(--muted);font-size:18px;margin-bottom:20px;line-height:1.5}
+h1{font-size:34px;line-height:1.12;margin:6px 0 22px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 8px 28px rgba(160,103,45,.08)}
 .step{font-weight:800;color:#b85e0a;margin:2px 0 10px;font-size:15px}
-.pick{display:block;border:3px dashed var(--o2);border-radius:22px;padding:27px 14px;text-align:center;background:#fffaf5;cursor:pointer}
-.pick b{display:block;font-size:22px;margin-bottom:9px}.pick span{color:var(--muted);font-size:14px;line-height:1.6}
+.pick{display:block;border:2px dashed var(--o2);border-radius:18px;padding:22px 14px;text-align:center;background:#fffaf5;cursor:pointer}
+.pick b{display:block;font-size:19px}.pick span{color:var(--muted);font-size:14px;line-height:1.6}
 input[type=file]{position:absolute;left:-9999px}
 .row{margin-top:18px}label.txt{display:block;margin-bottom:8px;font-size:17px}
 select,button{width:100%;border-radius:16px;padding:14px 15px;font-size:18px}
@@ -36,7 +36,7 @@ button:disabled{opacity:.42}
 .bar{height:100%;background:var(--o);width:0;transition:width .2s}
 .actions{display:flex;gap:8px;margin-top:9px}.actions button{font-size:14px;padding:9px}
 .rm{background:#fff2f0;color:#994236;border:1px solid #efcbc5}
-.notice{margin-top:16px;padding:13px 14px;border-radius:15px;background:#eef8f1;border:1px solid #cde7d6;font-size:14px;line-height:1.65;color:#35664a}
+.notice{margin-top:10px;font-size:13px;line-height:1.6;color:#777;text-align:center;background:none;border:0;padding:0}
 .note{margin-top:16px;font-size:13px;line-height:1.7;color:#76685b}
 .install{margin-top:18px;padding:15px;border-radius:18px;background:#fff5ea;border:1px solid #efd5bb;line-height:1.65;font-size:14px}
 .install b{color:#b45d0d}
@@ -45,23 +45,20 @@ button:disabled{opacity:.42}
 </head>
 <body>
 <main>
-<span class="pill">中文介面・免安裝・v1.2</span>
-<h1>🍊 橘子 MP3 批次轉檔器</h1>
-<div class="sub">一次選多個 M4A，全部轉成 MP3，再一次選擇要存到哪個「檔案」資料夾。</div>
+<h1>MP3 轉檔器</h1>
+
 
 <section class="card">
 <div class="step">① 選擇音檔</div>
 <label class="pick" for="files">
-  <b>點我選擇 M4A 音檔（可多選）</b>
-  <span>可從 iCloud Drive／「檔案」App 一次選多個<br>支援 M4A、AAC、WAV 等常見音訊格式</span>
+  <b>支援 M4A、AAC、WAV 音檔</b>
 </label>
 <input id="files" type="file" accept=".m4a,.aac,.wav,audio/*" multiple>
 <div id="summary" class="summary">尚未選擇檔案。</div>
 <div id="list"></div>
 
 <div class="row">
-  <div class="step">② 設定音質並轉檔</div>
-  <label class="txt" for="rate">MP3 音質：</label>
+  <div class="step">② MP3 音質</div>
   <select id="rate">
     <option value="128">128 kbps（檔案較小）</option>
     <option value="192" selected>192 kbps（推薦：詩班練唱）</option>
@@ -69,25 +66,22 @@ button:disabled{opacity:.42}
     <option value="320">320 kbps（最高常用音質）</option>
   </select>
 </div>
-<button id="go" class="primary" disabled>全部轉成 MP3</button>
+<div class="step" style="margin-top:18px">③ 全部轉檔</div><button id="go" class="primary" disabled>全部轉成 MP3</button>
 
 <div id="saveArea" class="hidden">
-  <div class="step" style="margin-top:18px">③ 選擇儲存位置</div>
-  <button id="saveAll" class="save">選擇資料夾並儲存全部 MP3</button>
-  <button id="downloadAll" class="primary" style="margin-top:10px">直接下載全部 MP3（備用）</button>
-  <div id="saveStatus" class="notice">建議先按「選擇資料夾並儲存全部 MP3」。若 iPhone 沒有叫出分享畫面，可改按「直接下載全部 MP3（備用）」；備用模式會存到 Safari 設定的下載資料夾。</div>
+  
+  <button id="saveAll" class="save">儲存全部 MP3</button>
+  <div id="saveStatus" class="notice">會開啟 iPhone 儲存畫面，可選擇 iCloud Drive 或「我的 iPhone」。</div>
 </div>
 
-<div class="note">音檔只在你的瀏覽器內處理，不會由本頁主動上傳。iPhone 若一次轉很多長音檔，建議每批 5～10 個較穩定。因 iPhone 的安全限制，網站不能在轉檔途中自動取得任意資料夾權限，所以「選擇資料夾」必須由你最後按一次「儲存全部 MP3」來開啟系統畫面。</div>
 </section>
 
-<div class="install"><b>📱 主畫面圖示</b><br>新版使用你確認的「橘子＋MP3＋轉檔箭頭」平面圖示。若桌面仍是舊圖示，請刪除舊捷徑，再用 Safari 開本站 → 分享 → 加入主畫面。</div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=12').catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=13').catch(()=>{});
 
 const f=document.getElementById('files');
 const go=document.getElementById('go');
@@ -96,7 +90,6 @@ const summary=document.getElementById('summary');
 const rate=document.getElementById('rate');
 const saveArea=document.getElementById('saveArea');
 const saveAll=document.getElementById('saveAll');
-const downloadAll=document.getElementById('downloadAll');
 const saveStatus=document.getElementById('saveStatus');
 
 let entries=[];
@@ -112,10 +105,8 @@ function render(){
     const d=document.createElement('div');
     d.className='item';
     d.innerHTML=
-      '<div class="name">'+(i+1)+'. '+esc(e.file.name)+'</div>'+
-      '<div class="meta">'+sz(e.file.size)+'</div>'+
-      '<div class="progress"><div class="bar" id="b'+i+'" style="width:'+(e.p||0)+'%"></div></div>'+
-      '<div class="status" id="s'+i+'">'+esc(e.status||'等待轉檔')+'</div>'+
+      '<div class="name">'+esc(e.file.name)+'</div>'+
+      ((e.p||0)>0 ? '<div class="progress"><div class="bar" id="b'+i+'" style="width:'+(e.p||0)+'%"></div></div><div class="status" id="s'+i+'">'+esc(e.status||'')+'</div>' : '')+
       '<div class="actions"><button class="rm" id="r'+i+'" '+(busy?'disabled':'')+'>移除</button></div>';
     list.appendChild(d);
     d.querySelector('#r'+i).onclick=()=>{
@@ -127,8 +118,8 @@ function render(){
   });
   go.disabled=busy||!entries.length;
   summary.textContent=entries.length
-    ? '已選擇 '+entries.length+' 個檔案：下面會全部轉成 MP3。'
-    : '尚未選擇檔案。';
+    ? '已選擇 '+entries.length+' 個檔案'
+    : '尚未選擇檔案';
 }
 
 f.addEventListener('change',()=>{
@@ -224,7 +215,7 @@ go.onclick=async()=>{
 
   busy=false;
   render();
-  summary.textContent='轉檔完成：'+ok+' / '+entries.length+' 個成功。';
+  summary.textContent='已完成 '+ok+' 個 MP3';
   if(ok>0){
     saveArea.classList.remove('hidden');
     setTimeout(()=>saveArea.scrollIntoView({behavior:'smooth',block:'center'}),100);
@@ -292,26 +283,7 @@ saveAll.onclick=async()=>{
   }
 };
 
-downloadAll.onclick=async()=>{
-  const done=entries.filter(e=>e.blob);
-  if(!done.length){
-    saveStatus.textContent='目前沒有可下載的 MP3。';
-    return;
-  }
-  saveStatus.textContent='正在逐一送出 '+done.length+' 個 MP3 到 Safari 下載資料夾…';
-  for(let i=0;i<done.length;i++){
-    const e=done[i];
-    const a=document.createElement('a');
-    a.href=e.url;
-    a.download=base(e.file.name)+'.mp3';
-    a.style.display='none';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    await new Promise(r=>setTimeout(r,500));
-  }
-  saveStatus.textContent='已送出全部 MP3。若 Safari 詢問是否允許多個下載，請選「允許」。';
-};
+
 render();
 </script>
 </body>
