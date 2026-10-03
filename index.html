@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#f28c28">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="橘子MP3">
-<link rel="manifest" href="manifest.webmanifest?v=15">
-<link rel="icon" type="image/png" href="icon.svg?v=16">
-<link rel="apple-touch-icon" href="icon.svg?v=16">
+<link rel="manifest" href="manifest.webmanifest?v=17">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=17">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png?v=17">
 <title>橘子 MP3 批次轉檔器</title>
 <style>
 :root{--bg:#fff8f1;--card:#fff;--o:#f28c28;--o2:#ffb36f;--txt:#292929;--muted:#777;--line:#efd4bc;--green:#267a4d}
@@ -45,7 +45,7 @@ button:disabled{opacity:.42}
 </head>
 <body>
 <main>
-<div class="title-row"><img class="title-icon" src="icon.svg?v=16" alt=""><h1>MP3 轉檔器</h1></div>
+<div class="title-row"><img class="title-icon" src="icon.svg?v=17" alt=""><h1>MP3 轉檔器</h1></div>
 
 
 <section class="card">
@@ -81,7 +81,7 @@ button:disabled{opacity:.42}
 <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.1/lame.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=16').catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js?v=17').catch(()=>{});
 
 const f=document.getElementById('files');
 const go=document.getElementById('go');
