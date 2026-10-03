@@ -19,6 +19,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Generate PNG icons
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          rsvg-convert -w 32 -h 32 icon.svg > icon-32.png
+          rsvg-convert -w 180 -h 180 icon.svg > icon-180.png
+          rsvg-convert -w 192 -h 192 icon.svg > icon-192.png
+          rsvg-convert -w 512 -h 512 icon.svg > icon-512.png
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
